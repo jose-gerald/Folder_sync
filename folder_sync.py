@@ -1,3 +1,4 @@
+# Import libraries and logging configurations
 import os 
 import time   
 import subprocess 
@@ -13,33 +14,33 @@ path_replica = r"C:\Users\zecam\OneDrive\Área de Trabalho\c programm"
 
 hidden_files = [] 
 time_creations = {}
-# function to copy content 
+# Function to copy content 
 def copy(source_path, replica_path): 
-# loop to iterate over every element of source folder   
+# Loop to iterate over every element of source folder   
    for file in os.listdir(source_path):
       s_path = os.path.join(source_path, file)
       r_path = os.path.join(replica_path, file)
-        # in case iterable is a file
+        # In case iterable is a file
       if os.path.isfile(s_path) == True: 
-           # open file in 'read mode'21
+           # Open file in 'read mode'21
             with open(s_path,'rb') as content:
                text= content.read()
-           # open file in replica directory in 'write mode' and perform writing 
+           # Open file in replica directory in 'write mode' and perform writing 
             with open(r_path, 'wb') as content_replica:
                content_replica.write(text)  
                logging.info(f'[{time.strftime("%Y-%m-%d %H:%M:%S")}] copied{s_path} to {r_path}')
       elif os.path.isdir(s_path) == True:
-       # in case of iterable being a folder the 'copy' function is applied 
+       # In case of iterable being a folder the 'copy' function is applied 
                   os.makedirs(r_path, exist_ok= True)
                   logging.info(f'[{time.strftime("%Y-%m-%d %H:%M:%S")}] created directory {r_path}')
                   copy(s_path, r_path)
       else:
-         logging.warning(f'[{time.strftime("%Y-%m-%d %H:%M:%S")}] Skipped {source_path} as it is neither a file nor a directory.')
-   # check if all files were copied, if not the error is due to permission ristrictions 
+         logging.warning(f'[{time.strftime("%Y-%m-%d %H:%M:%S")}] skipped {s_path} as it is neither a file nor a directory.')
+   # Check if all files were copied, if not the error is due to permission ristrictions 
    assert os.listdir(source_path) == os.listdir(replica_path), \
    logging.warning(f'[{time.strftime("%Y-%m-%d %H:%M:%S")}] there exist files or directories in {source_path} to which permission to access is denied  ')              
                   
-# synchronizing directories function                                                        
+# Synchronizing directories function                                                        
 def syncfunc(source_path, days= 0, hours = 0, seconds = 0):
         days = int(days)
         hours = int(hours)
@@ -55,7 +56,7 @@ def syncfunc(source_path, days= 0, hours = 0, seconds = 0):
                     time.sleep(date_sync)
                     subprocess.run(['python','folder_sinc.py'])
 
-# function to unhidde the 'hidden files'
+# Function to unhidde the 'hidden files'
 def unhidde_files(source_path):
 
    for file in os.listdir(source_path):
@@ -67,7 +68,7 @@ def unhidde_files(source_path):
          hidden_files.append(file)
          logging.info(f'[{time.strftime("%Y-%m-%d %H:%M:%S")}] {new_file} was striped of its hidden status')
 
-#  function to hidde 'unhidden files'
+# Function to hidde 'unhidden files'
 def hidde_files(source_path):
     for file in hidden_files:
         original_file_path = os.path.join(source_path, file)
@@ -76,7 +77,7 @@ def hidde_files(source_path):
         logging.info(f'[{time.strftime("%Y-%m-%d %H:%M:%S")}] {file} was given hidden status')
 
 
-
+# User argument parsing 
 parser = argparse.ArgumentParser(description = 'This program is designed to copy two directories and perform periodic synchronization.')
 
 parser.add_argument('path_source', help = 'Path to the source directory.')
@@ -88,7 +89,7 @@ parser.add_argument('--log-file', default = 'log_file.log', help = 'File logged 
 
 args = parser.parse_args()
 
-
+# Program execution block 
 unhidde_files(args.path_source)
 copy(args.path_source, args.path_replica)
 hidde_files(args.path_source)
