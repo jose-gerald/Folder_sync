@@ -12,8 +12,8 @@ logging.basicConfig(format = ' %(levelname)s - %(message)s ',
 path_source = r"C:\Users\zecam\OneDrive\Área de Trabalho\notebook"
 path_replica = r"C:\Users\zecam\OneDrive\Área de Trabalho\c programm"
 
-hidden_files = [] 
-time_creations = {}
+hidden_files = []
+
 # Function to copy content 
 def copy(source_path, replica_path): 
 # Loop to iterate over every element of source folder   
