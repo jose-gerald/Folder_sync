@@ -22,7 +22,7 @@ def copy(source_path, replica_path):
       r_path = os.path.join(replica_path, file)
         # In case iterable is a file
       if os.path.isfile(s_path) == True: 
-           # Open file in 'read mode'21
+           # Open file in 'read mode'
             with open(s_path,'rb') as content:
                text= content.read()
            # Open file in replica directory in 'write mode' and perform writing 
