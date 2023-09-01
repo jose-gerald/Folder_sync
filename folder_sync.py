@@ -5,7 +5,7 @@ import subprocess
 import argparse
 import logging
 
-logging.basicConfig(format = '%(asctime)s - %(levelname)s - %(message)s ', 
+logging.basicConfig(format = ' %(levelname)s - %(message)s ', 
                     level = logging.DEBUG, handlers=[logging.FileHandler('log_file.log'), logging.StreamHandler()] )
 
 
@@ -28,17 +28,17 @@ def copy(source_path, replica_path):
            # Open file in replica directory in 'write mode' and perform writing 
             with open(r_path, 'wb') as content_replica:
                content_replica.write(text)  
-               logging.info(f'[{time.strftime("%Y-%m-%d %H:%M:%S")}] copied{s_path} to {r_path}')
+               logging.info(f'[{time.strftime("%Y-%m-%d %H:%M:%S")}] - copied{s_path} to: \n {r_path}')
       elif os.path.isdir(s_path) == True:
        # In case of iterable being a folder the 'copy' function is applied 
                   os.makedirs(r_path, exist_ok= True)
-                  logging.info(f'[{time.strftime("%Y-%m-%d %H:%M:%S")}] created directory {r_path}')
+                  logging.info(f'[{time.strftime("%Y-%m-%d %H:%M:%S")}] - created directory : \n {r_path}')
                   copy(s_path, r_path)
       else:
-         logging.warning(f'[{time.strftime("%Y-%m-%d %H:%M:%S")}] skipped {s_path} as it is neither a file nor a directory.')
+         logging.warning(f'[{time.strftime("%Y-%m-%d %H:%M:%S")}] - skipped {s_path}: \n it is neither a file nor a directory.')
    # Check if all files were copied, if not the error is due to permission ristrictions 
    assert os.listdir(source_path) == os.listdir(replica_path), \
-   logging.warning(f'[{time.strftime("%Y-%m-%d %H:%M:%S")}] there exist files or directories in {source_path} to which permission to access is denied  ')              
+   logging.warning(f'[{time.strftime("%Y-%m-%d %H:%M:%S")}] - there exist files or directories in {source_path} to which permission to access is denied  ')              
                   
 # Synchronizing directories function                                                        
 def syncfunc(source_path, days= 0, hours = 0, seconds = 0):
@@ -66,7 +66,7 @@ def unhidde_files(source_path):
          new_file_path = os.path.join(source_path, new_file)
          os.rename(file_path, new_file_path)
          hidden_files.append(file)
-         logging.info(f'[{time.strftime("%Y-%m-%d %H:%M:%S")}] {new_file} was striped of its hidden status')
+         logging.info(f'[{time.strftime("%Y-%m-%d %H:%M:%S")}] - {new_file}: \n was striped of its hidden status')
 
 # Function to hidde 'unhidden files'
 def hidde_files(source_path):
@@ -74,7 +74,7 @@ def hidde_files(source_path):
         original_file_path = os.path.join(source_path, file)
         current_file_path = os.path.join(source_path, file.lstrip('.'))
         os.rename(current_file_path, original_file_path)
-        logging.info(f'[{time.strftime("%Y-%m-%d %H:%M:%S")}] {file} was given hidden status')
+        logging.info(f'[{time.strftime("%Y-%m-%d %H:%M:%S")}] - {file}: was given hidden status')
 
 
 # User argument parsing 
