@@ -37,8 +37,7 @@ def copy(source_path, replica_path):
       else:
          logging.warning(f'[{time.strftime("%Y-%m-%d %H:%M:%S")}] - skipped {s_path}: \n it is neither a file nor a directory.')
    # Check if all files were copied, if not the error is due to permission ristrictions 
-   assert os.listdir(source_path) == os.listdir(replica_path), \
-   logging.warning(f'[{time.strftime("%Y-%m-%d %H:%M:%S")}] - there exist files or directories in {source_path} to which permission to access is denied  ')              
+             
                   
 # Synchronizing directories function                                                        
 def syncfunc(source_path, days= 0, hours = 0, seconds = 0):
@@ -52,9 +51,13 @@ def syncfunc(source_path, days= 0, hours = 0, seconds = 0):
                   # if path dates dont match apply copy function
                   if os.path.getmtime(s_path) < os.path.getmtime(r_path):
                     copy(source_path, path_replica)
+                    # hidde files
+                    hidde_files(args.path_source)
+                    hidde_files(args.path_replica)
                     # put program to sleep
                     time.sleep(date_sync)
-                    subprocess.run(['python','folder_sinc.py'])
+                    subprocess.run(['python','folder_sync.py'])
+
 
 # Function to unhidde the 'hidden files'
 def unhidde_files(source_path):
@@ -91,9 +94,14 @@ args = parser.parse_args()
 
 # Program execution block 
 unhidde_files(args.path_source)
-copy(args.path_source, args.path_replica)
-hidde_files(args.path_source)
-hidde_files(args.path_replica)
+
+if __name__ == '__main__': 
+   unhidde_files(args.path_source)
+   copy(args.path_source, args.path_replica)
+   hidde_files(args.path_source)
+   hidde_files(args.path_replica)
+
+unhidde_files(args.path_source)
 syncfunc(args.path_source, args.days, args.hours, args.seconds)
 
 
