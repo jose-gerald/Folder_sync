@@ -93,7 +93,6 @@ parser.add_argument('--log-file', default = 'log_file.log', help = 'File logged 
 args = parser.parse_args()
 
 # Program execution block 
-unhidde_files(args.path_source)
 
 if __name__ == '__main__': 
    unhidde_files(args.path_source)
